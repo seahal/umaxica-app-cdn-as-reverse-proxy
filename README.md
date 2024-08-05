@@ -1,2 +1,2 @@
 # tl;dr
-root files is [here](github.com/seahal/demo).
+root files is [here](https://github.com/seahal/demo).
