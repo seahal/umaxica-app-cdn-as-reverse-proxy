@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/seahal/umaxica-app-aws-cloudfront/issues"
   },
-  "homepage": "https://github.com/seahal/umaxica-app-aws-cloudfront#readme"
+  "homepage": "https://github.com/seahal/umaxica-app-aws-cloudfront#readme",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  }
 }
