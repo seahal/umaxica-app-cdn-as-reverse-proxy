@@ -34,7 +34,6 @@ jobs:
       #     gem install bundler
       #     bundle config path vendor/bundle
       #     bundle install --jobs 4 --retry 3
-      # - run: bundle exec jekyll build -s ./net
       # - run: aws s3 sync ./_site s3://com.seahal --delete # ここで aws の s3 にプッシュ、url がリアルのと一致しないのに注意
       # - run: aws cloudfront create-invalidation --distribution-id E29JJUCSVJD128 --paths '/*' # ここでawsのcfのキャッシュ消去(en)
       # - run: aws cloudfront create-invalidation --distribution-id EAOO2PZTA3QQY --paths '/*' # ここで aws の cf のキャッシュ消去(pd)
