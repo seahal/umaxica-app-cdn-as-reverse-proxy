@@ -1,9 +1,7 @@
-name: Publishment
+name: CI
 on:
   push:
     branches: ["master", "develop"]
-  schedule:
-    - cron: '0 0 1 * *' # 毎月一日に動作するようにする。
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
