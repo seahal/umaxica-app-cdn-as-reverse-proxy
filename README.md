@@ -1,2 +1,5 @@
 # tl;dr
-root files is [here](https://github.com/seahal/demo).
+root files is [umaxica](https://github.com/umaxica).
+
+# what is this repo.
+- Amazonn Cloudfront Functions
