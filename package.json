@@ -1,22 +1,26 @@
 {
-  "name": "umaxica-app-aws-cloudfront",
-  "version": "1.0.0",
-  "description": "root files is [here](https://github.com/seahal/demo).",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seahal/umaxica-app-aws-cloudfront.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/seahal/umaxica-app-aws-cloudfront/issues"
-  },
-  "homepage": "https://github.com/seahal/umaxica-app-aws-cloudfront#readme",
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4"
-  }
+	"name": "umaxica-app-aws-cloudfront",
+	"version": "1.0.0",
+	"description": "root files is [here](https://github.com/seahal/demo).",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/seahal/umaxica-app-aws-cloudfront.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/seahal/umaxica-app-aws-cloudfront/issues"
+	},
+	"homepage": "https://github.com/seahal/umaxica-app-aws-cloudfront#readme",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"wrangler": "^3.114.0"
+	},
+	"dependencies": {
+		"biome": "^0.3.3"
+	}
 }
