@@ -18,9 +18,14 @@
 	"homepage": "https://github.com/seahal/umaxica-app-aws-cloudfront#readme",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"wrangler": "^3.114.0"
+		"wrangler": "^3.114.0",
+		"@types/bun": "latest"
 	},
 	"dependencies": {
 		"biome": "^0.3.3"
+	},
+	"private": true,
+	"peerDependencies": {
+		"typescript": "^5"
 	}
 }
