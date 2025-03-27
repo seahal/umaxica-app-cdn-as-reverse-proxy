@@ -38,9 +38,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - name: Sync to S3
+      - name: Sync to S3 (staging)
         if: true
-        run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.${{ matrix.one }}.${{ matrix.two }}.${{ matrix.three }}.${{ matrix.four }}  --delete
-      - name: Sync to S3
+        run: aws s3 sync ./src/api/jp/app/errors s3://umaxica.staging.cloudfront.${{ matrix.one }}.${{ matrix.two }}.${{ matrix.three }}.${{ matrix.four }}  --delete
+      - name: Sync to S3 (production)
         if: false
-        run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.staging.cloudfront.api.jp.app.errors --delete
+        run: aws s3 sync ./src/api/jp/app/errors s3://umaxica.production.cloudfront.${{ matrix.one }}.${{ matrix.two }}.${{ matrix.three }}.${{ matrix.four }}  --delete
