@@ -51,7 +51,7 @@ jobs:
       - name: Sync to S3
         run: aws s3 sync  ./src/api/jp/com/public s3://umaxica.production.cloudfront.api.jp.com.public --delete        
       - name: Sync to S3
-        run: aws s3 sync  ./src/api/www/app/public s3://umaxica.production.cloudfront.www.jp.app.public --delete        
+        run: aws s3 sync  ./src/www/jp/app/public s3://umaxica.production.cloudfront.www.jp.app.public --delete
 
 # Uncomment below for AWS deployment
 # deploy:
