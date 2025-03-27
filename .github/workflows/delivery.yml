@@ -40,7 +40,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Sync to S3
         if: true
-        run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.api.jp.app.errors --delete
+        run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.${{ matrix.one }}.${{ matrix.two }}.${{ matrix.three }}.${{ matrix.four }}  --delete
       - name: Sync to S3
         if: false
         run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.staging.cloudfront.api.jp.app.errors --delete
