@@ -1,5 +1,4 @@
 name: CD
-
 on:
   push:
     branches:
@@ -9,15 +8,19 @@ on:
     branches:
       - master
       - develop # TODO: あとでけす
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
-
 permissions: {}
-
 jobs:
   install:
+    strategy:
+      matrix:
+        one: ["production", "staging"]
+        two: ["www", "api"]
+        three: ["jp", "root"]
+        four: ["com", "net", "app", "org"]
+        five: ["public", "maintenance", "errors", "functions"]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -26,20 +29,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
-      
       - name: Install dependencies
         run: bun install
-  
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}        
-
+          aws-region: ${{ secrets.AWS_REGION }}
       - name: Sync to S3
         run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.api.jp.app.errors --delete
       - name: Sync to S3
@@ -49,52 +48,6 @@ jobs:
       - name: Sync to S3
         run: aws s3 sync  ./src/api/jp/app/public s3://umaxica.production.cloudfront.api.jp.app.public --delete
       - name: Sync to S3
-        run: aws s3 sync  ./src/api/jp/com/public s3://umaxica.production.cloudfront.api.jp.com.public --delete        
+        run: aws s3 sync  ./src/api/jp/com/public s3://umaxica.production.cloudfront.api.jp.com.public --delete
       - name: Sync to S3
         run: aws s3 sync  ./src/www/jp/app/public s3://umaxica.production.cloudfront.www.jp.app.public --delete
-
-# Uncomment below for AWS deployment
-# deploy:
-#   needs: install
-#   runs-on: ubuntu-latest
-#   if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
-#   timeout-minutes: 10
-#   defaults:
-#     run:
-#       shell: bash
-#   environment:
-#     name: ${{ github.ref == 'refs/heads/master' ? 'production' : 'development' }}
-#   steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v4
-#     
-#     - name: Setup Bun
-#       uses: oven-sh/setup-bun@v2
-#     
-#     - name: Restore cached dependencies
-#       uses: actions/cache@v3
-#       with:
-#         path: ~/.bun/install/cache
-#         key: ${{ needs.install.outputs.cache-key }}
-#     
-#     - name: Install dependencies
-#       run: bun install
-#     
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v4
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: ${{ secrets.AWS_REGION }}
-#     
-#     - name: Sync to S3
-#       run: aws s3 sync ./_site s3://com.seahal --delete
-#       # ここで aws の s3 にプッシュ、url がリアルのと一致しないのに注意
-#     
-#     - name: Invalidate CloudFront Cache (EN)
-#       run: aws cloudfront create-invalidation --distribution-id E29JJUCSVJD128 --paths '/*'
-#       # ここでawsのcfのキャッシュ消去(en)
-#     
-#     - name: Invalidate CloudFront Cache (PD) 
-#       run: aws cloudfront create-invalidation --distribution-id EAOO2PZTA3QQY --paths '/*'
-#       # ここで aws の cf のキャッシュ消去(pd)
