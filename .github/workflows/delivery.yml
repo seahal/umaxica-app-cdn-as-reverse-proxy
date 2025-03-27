@@ -42,6 +42,12 @@ jobs:
 
       - name: Sync to S3
         run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.api.jp.app.errors --delete
+      - name: Sync to S3
+        run: aws s3 sync  ./src/api/jp/app/functions s3://umaxica.production.cloudfront.api.jp.app.functions --delete
+      - name: Sync to S3
+        run: aws s3 sync  ./src/api/jp/app/maintenance s3://umaxica.production.cloudfront.api.jp.app.maitenace --delete
+      - name: Sync to S3
+        run: aws s3 sync  ./src/api/jp/app/public s3://umaxica.production.cloudfront.api.jp.app.public --delete
 
 # Uncomment below for AWS deployment
 # deploy:
