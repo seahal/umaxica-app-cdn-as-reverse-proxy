@@ -1,35 +1,91 @@
 name: CD
+
 on:
   push:
     branches:
       - master
-      - develop
+      - develop # TODO: あとでけす
   pull_request:
     branches:
       - master
-      - develop
+      - develop # TODO: あとでけす
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-permissions:
-  contents: read
-  issues: write
+  cancel-in-progress: false
+
+permissions: {}
+
 jobs:
-  setup:
+  install:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      # - uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ secrets.AWS_REGION }}
-      # - run: aws s3 sync ./_site s3://com.seahal --delete # ここで aws の s3 にプッシュ、url がリアルのと一致しないのに注意
-      # - run: aws cloudfront create-invalidation --distribution-id E29JJUCSVJD128 --paths '/*' # ここでawsのcfのキャッシュ消去(en)
-      # - run: aws cloudfront create-invalidation --distribution-id EAOO2PZTA3QQY --paths '/*' # ここで aws の cf のキャッシュ消去(pd)
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      
+      - name: Install dependencies
+        run: bun install
+        
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+    
+    outputs:
+      cache-key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+
+# Uncomment below for AWS deployment
+# deploy:
+#   needs: install
+#   runs-on: ubuntu-latest
+#   if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+#   timeout-minutes: 10
+#   defaults:
+#     run:
+#       shell: bash
+#   environment:
+#     name: ${{ github.ref == 'refs/heads/master' ? 'production' : 'development' }}
+#   steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
+#     
+#     - name: Setup Bun
+#       uses: oven-sh/setup-bun@v2
+#     
+#     - name: Restore cached dependencies
+#       uses: actions/cache@v3
+#       with:
+#         path: ~/.bun/install/cache
+#         key: ${{ needs.install.outputs.cache-key }}
+#     
+#     - name: Install dependencies
+#       run: bun install
+#     
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v4
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: ${{ secrets.AWS_REGION }}
+#     
+#     - name: Sync to S3
+#       run: aws s3 sync ./_site s3://com.seahal --delete
+#       # ここで aws の s3 にプッシュ、url がリアルのと一致しないのに注意
+#     
+#     - name: Invalidate CloudFront Cache (EN)
+#       run: aws cloudfront create-invalidation --distribution-id E29JJUCSVJD128 --paths '/*'
+#       # ここでawsのcfのキャッシュ消去(en)
+#     
+#     - name: Invalidate CloudFront Cache (PD) 
+#       run: aws cloudfront create-invalidation --distribution-id EAOO2PZTA3QQY --paths '/*'
+#       # ここで aws の cf のキャッシュ消去(pd)
