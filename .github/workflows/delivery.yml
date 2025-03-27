@@ -40,6 +40,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Sync to S3
+        if: github.ref == 'refs/heads/main'
         run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.production.cloudfront.api.jp.app.errors --delete
       - name: Sync to S3
+        if: github.ref == 'refs/heads/develop'
         run: aws s3 sync  ./src/api/jp/app/errors s3://umaxica.staging.cloudfront.api.jp.app.errors --delete
