@@ -37,9 +37,10 @@ jobs:
         with:
           path: ~/.bun/install/cache
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-            
+          enableCrossOsArchive: false
+          fail-on-cache-miss: false
+          lookup-only: false
+
       - name: Install dependencies
         run: bun install            
 
