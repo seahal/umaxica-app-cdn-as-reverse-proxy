@@ -39,7 +39,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Sync to S3 (staging)
-        if: true
+        if: false
         run: aws s3 sync ./src/${{ matrix.one }}/${{ matrix.two }}/${{ matrix.three }}/${{ matrix.four }} s3://umaxica.staging.cloudfront.${{ matrix.one }}.${{ matrix.two }}.${{ matrix.three }}.${{ matrix.four }} --delete
       - name: Sync to S3 (production)
         if: true
